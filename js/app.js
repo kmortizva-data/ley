@@ -5,7 +5,13 @@ import * as progress from './ui/progress.js';
 import * as nutrition from './ui/nutrition.js';
 import * as settings from './ui/settings.js';
 
-const VIEWS = { today, history, progress, nutrition, settings };
+import * as exercise from './ui/exercise.js';
+
+// technique is loaded on demand: it pulls in the pose engine, which most visits never need.
+const technique = { mount: async (...args) => (await import('./ui/technique.js')).mount(...args) };
+const VIEWS = { today, history, progress, nutrition, settings, exercise, technique };
+// Screens reached from Hoy keep that tab highlighted.
+const TAB_OF = { exercise: 'today', technique: 'today' };
 const root = document.getElementById('view');
 const toastEl = document.getElementById('toast');
 const restEl = document.getElementById('rest');
@@ -86,28 +92,34 @@ restEl.addEventListener('click', (e) => {
 });
 
 // --- routing
-function currentTab() {
-  const tab = location.hash.slice(1);
-  return VIEWS[tab] ? tab : 'today';
+/** The hash is "view" or "view/parameter", for example "exercise/squat". */
+function currentRoute() {
+  const [view, param] = location.hash.slice(1).split('/');
+  return VIEWS[view] ? { view, param } : { view: 'today', param: undefined };
 }
 
-function go(tab) {
-  if (currentTab() === tab) render();
-  else location.hash = tab;
+function go(target) {
+  if (location.hash.slice(1) === target) render();
+  else location.hash = target;
 }
 
 const ctx = { toast, startRest, stopRest, go };
+let cleanup = null;
 
 async function render() {
-  const tab = currentTab();
+  const { view, param } = currentRoute();
+  const tab = TAB_OF[view] ?? view;
   for (const link of document.querySelectorAll('nav a')) {
     link.classList.toggle('active', link.dataset.tab === tab);
     if (link.dataset.tab === tab) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
+  // A screen may hand back a function that stops its animation or camera.
+  if (typeof cleanup === 'function') cleanup();
+  cleanup = null;
   root.onclick = root.oninput = root.onsubmit = root.onchange = null;
   try {
-    await VIEWS[tab].mount(root, ctx);
+    cleanup = await VIEWS[view].mount(root, ctx, param);
   } catch (err) {
     console.error(err);
     root.textContent = 'Algo falló al abrir esta pantalla. Recarga la página.';

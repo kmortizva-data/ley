@@ -18,14 +18,18 @@ let filesetPromise;
  * @param {{model?: 'lite'|'full', delegate?: 'GPU'|'CPU'}} options
  * @returns {Promise<{detect:(source:HTMLVideoElement|HTMLCanvasElement, timeMs:number)=>Array|null, close:()=>void}>}
  */
-export async function createPose({ model = 'lite', delegate = 'GPU' } = {}) {
+export async function createPose({ model = 'lite', delegate = 'GPU', runningMode = 'VIDEO' } = {}) {
   filesetPromise ??= FilesetResolver.forVisionTasks(new URL('wasm', BASE).href);
   const landmarker = await PoseLandmarker.createFromOptions(await filesetPromise, {
     baseOptions: { modelAssetPath: new URL(MODELS[model].file, BASE).href, delegate },
-    runningMode: 'VIDEO',
+    runningMode,
     numPoses: 1,
   });
   return {
+    /** Single still picture; needs runningMode 'IMAGE'. */
+    detectImage(source) {
+      return landmarker.detect(source).landmarks?.[0] ?? null;
+    },
     /** 33 landmarks normalized to 0..1, or null when nobody is found. */
     detect(source, timeMs) {
       return landmarker.detectForVideo(source, timeMs).landmarks?.[0] ?? null;

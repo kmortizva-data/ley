@@ -57,7 +57,7 @@ function cardHtml(id, rows, s) {
   return `
   <article class="card ex ${doneCount === rows.length ? 'complete' : ''}" data-ex="${id}">
     <header class="ex-head">
-      <h2>${esc(ex.name)}</h2>
+      <h2><a class="ex-link" href="#exercise/${esc(id)}">${esc(ex.name)}<span aria-hidden="true">ver</span></a></h2>
       <div class="core" aria-label="${doneCount} de ${rows.length} series hechas">
         ${rows.map((r) => `<i class="${r.done ? 'on' : ''}"></i>`).join('')}
       </div>

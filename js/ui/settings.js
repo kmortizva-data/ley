@@ -38,10 +38,16 @@ export async function mount(root, ctx) {
     </details>`).join('')}
   </article>
 
+  <article class="card"><h2>Créditos</h2>
+    <p class="note">Reconocimiento del cuerpo: MediaPipe Pose Landmarker, de Google, con licencia Apache 2.0. Corre dentro del teléfono.</p>
+    <p class="note">Fotos de los ejercicios: free-exercise-db, de dominio público. Las figuras animadas son de la app.</p>
+    <p class="note"><a class="link" href="lab/pose.html">Laboratorio de cámara</a> para medir la velocidad de tu teléfono.</p>
+  </article>
+
   <article class="card"><h2>Zona de riesgo</h2>
     <button class="link danger" data-act="wipe">Borrar todos mis datos</button>
   </article>
-  <p class="disclaimer">Ley, versión 0.1. Pautas generales basadas en estudios, no un plan médico.</p>`;
+  <p class="disclaimer">Ley, versión 0.2. Pautas generales basadas en estudios, no un plan médico.</p>`;
 
   root.onsubmit = null;
   root.oninput = async (e) => {

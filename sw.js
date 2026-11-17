@@ -1,13 +1,15 @@
 // Service worker: network first, cache as fallback.
 // Online you always get the newest files; offline (the gym basement) you get the last copy.
 
-const CACHE = 'ley-v1';
+const CACHE = 'ley-v2';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/db.js', 'js/evidence.js',
   'js/logic/program.js', 'js/logic/progression.js', 'js/logic/e1rm.js', 'js/logic/nutrition.js',
   'js/ui/util.js', 'js/ui/today.js', 'js/ui/history.js', 'js/ui/progress.js', 'js/ui/charts.js',
-  'js/ui/nutrition.js', 'js/ui/settings.js',
+  'js/ui/nutrition.js', 'js/ui/settings.js', 'js/ui/exercise.js',
+  'js/figure.js', 'js/poses.js', 'js/logic/cues.js', 'data/poses.json',
+  // The camera screen, its engine (30 MB) and the photos are cached the first time they are opened.
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png',
 ];
 
