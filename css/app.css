@@ -83,7 +83,7 @@ h1 { font-size: 38px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02
 /* buttons */
 .primary { display: block; width: 100%; min-height: 52px; border: 0; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 16px; padding: 0 18px; }
 .primary.armed { background: var(--warn); }
-.ghost { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 18px; border: 1px solid var(--line); border-radius: 12px; font-weight: 600; cursor: pointer; width: 100%; }
+.ghost { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 18px; border: 1px solid var(--line); border-radius: 12px; font-weight: 600; cursor: pointer; width: 100%; background: none; color: var(--text); }
 .link { background: none; border: 0; padding: 6px 0; color: var(--accent); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .link.danger { color: var(--warn); text-decoration-color: color-mix(in srgb, var(--warn) 40%, transparent); }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
