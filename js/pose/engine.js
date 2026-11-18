@@ -26,6 +26,16 @@ export async function createPose({ model = 'lite', delegate = 'GPU', runningMode
     numPoses: 1,
   });
   return {
+    /**
+     * Single still picture with both outputs; needs runningMode 'IMAGE'.
+     * world holds the same 33 joints in meters, origin between the hips, x to the image right,
+     * y down, z away from the camera.
+     */
+    detectImageFull(source) {
+      const result = landmarker.detect(source);
+      if (!result.landmarks?.[0]) return null;
+      return { landmarks: result.landmarks[0], world: result.worldLandmarks[0] };
+    },
     /** Single still picture; needs runningMode 'IMAGE'. */
     detectImage(source) {
       return landmarker.detect(source).landmarks?.[0] ?? null;

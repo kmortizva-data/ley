@@ -40,14 +40,15 @@ export async function mount(root, ctx) {
 
   <article class="card"><h2>Créditos</h2>
     <p class="note">Reconocimiento del cuerpo: MediaPipe Pose Landmarker, de Google, con licencia Apache 2.0. Corre dentro del teléfono.</p>
-    <p class="note">Fotos de los ejercicios: free-exercise-db, de dominio público. Las figuras animadas son de la app.</p>
+    <p class="note">Maniquí 3D: cuerpo de Quaternius (Universal Base Characters), de dominio público, dibujado con three.js (licencia MIT). Las posturas, el movimiento y los músculos en rojo son de la app.</p>
+    <p class="note">Fotos de los ejercicios: free-exercise-db, de dominio público.</p>
     <p class="note"><a class="link" href="lab/pose.html">Laboratorio de cámara</a> para medir la velocidad de tu teléfono.</p>
   </article>
 
   <article class="card"><h2>Zona de riesgo</h2>
     <button class="link danger" data-act="wipe">Borrar todos mis datos</button>
   </article>
-  <p class="disclaimer">Ley, versión 0.2. Pautas generales basadas en estudios, no un plan médico.</p>`;
+  <p class="disclaimer">Ley, versión 0.3. Pautas generales basadas en estudios, no un plan médico.</p>`;
 
   root.onsubmit = null;
   root.oninput = async (e) => {

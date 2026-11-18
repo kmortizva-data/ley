@@ -158,6 +158,9 @@ h1 { font-size: 38px; line-height: 1.05; font-weight: 800; letter-spacing: -0.02
 .hero.compact { padding-bottom: 10px; }
 .hero.compact h1 { font-size: 28px; }
 .as-link { display: grid; place-items: center; text-decoration: none; margin-top: 12px; }
+.demo3d canvas { display: block; width: 100%; aspect-ratio: 5 / 6; max-height: 400px; cursor: grab; }
+.demo3d canvas:active { cursor: grabbing; }
+.demo3d canvas[hidden] { display: none; }
 .figure { display: block; width: min(100%, 300px); margin: 0 auto; }
 .figure path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .fig-far { stroke: #5a616c; }

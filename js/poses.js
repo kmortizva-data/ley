@@ -9,7 +9,7 @@ export function loadPoses() {
 }
 
 // What each figure rests on. Exercises not listed are done standing.
-const SUPPORT = {
+export const SUPPORT = {
   bench: 'lying', incline: 'lying', legcurl: 'lying', legpress: 'lying',
   row: 'seated', ohp: 'seated', pulldown: 'seated',
 };

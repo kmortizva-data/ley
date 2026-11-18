@@ -24,12 +24,16 @@ export async function mount(root, ctx, id) {
   </section>
 
   <article class="card demo">
-    ${poses ? figureSvg(poses, 0, options) : '<p class="empty">Aún no hay figura para este ejercicio.</p>'}
+    <div class="demo3d">
+      <canvas data-mannequin hidden aria-label="Maniquí 3D que hace el movimiento; arrastra para girarlo"></canvas>
+      ${poses ? figureSvg(poses, 0, options) : '<p class="empty">Cargando la figura...</p>'}
+    </div>
+    <p class="note" data-demo-note hidden>Arrastra de lado para girar la figura. En rojo, los músculos que trabajan; en rojo suave, los que ayudan.</p>
     <div class="photos">
       <figure><img src="assets/photos/${esc(id)}_0.jpg" alt="Posición inicial de ${esc(ex.name)}" width="520" height="347"><figcaption>Inicio</figcaption></figure>
       <figure><img src="assets/photos/${esc(id)}_1.jpg" alt="Posición final de ${esc(ex.name)}" width="520" height="347"><figcaption>Final</figcaption></figure>
     </div>
-    <p class="note">La figura es de la app: se dibuja con los puntos del cuerpo sacados de estas dos fotos. Fotos de free-exercise-db, dominio público.</p>
+    <p class="note">Fotos de free-exercise-db, dominio público.</p>
   </article>
 
   ${CAMERA_READY.has(id) ? `
@@ -56,5 +60,43 @@ export async function mount(root, ctx, id) {
 
   root.onclick = root.oninput = null;
   const svg = root.querySelector('svg.figure');
-  return svg && poses ? animateFigure(svg, poses, options) : undefined;
+  let stopFlat = svg && poses ? animateFigure(svg, poses, options) : null;
+
+  // The flat figure shows at once; the 3D mannequin replaces it when its files have arrived.
+  // If the phone cannot draw 3D, the flat figure simply stays.
+  let alive = true;
+  let mannequin = null;
+  const onResize = () => mannequin?.resize();
+  (async () => {
+    const { POSES } = await import('../mannequin/poses.js');
+    if (!POSES[id]) return;
+    const { createMannequin } = await import('../mannequin/scene.js');
+    const canvas = root.querySelector('[data-mannequin]');
+    if (!alive || !canvas) return;
+    canvas.hidden = false;
+    const made = await createMannequin(canvas);
+    if (!alive) return made.dispose();
+    mannequin = made;
+    mannequin.resize();
+    mannequin.setMuscles(ex.primary, ex.secondary);
+    mannequin.setExercise(POSES[id]);
+    mannequin.start();
+    stopFlat?.();
+    stopFlat = null;
+    svg?.remove();
+    root.querySelector('.demo3d .empty')?.remove();
+    root.querySelector('[data-demo-note]').hidden = false;
+    window.addEventListener('resize', onResize);
+  })().catch((err) => {
+    console.warn('3D figure unavailable, keeping the flat one', err);
+    const canvas = root.querySelector('[data-mannequin]');
+    if (canvas) canvas.hidden = true;
+  });
+
+  return () => {
+    alive = false;
+    stopFlat?.();
+    window.removeEventListener('resize', onResize);
+    mannequin?.dispose();
+  };
 }

@@ -1,7 +1,7 @@
 // Service worker: network first, cache as fallback.
 // Online you always get the newest files; offline (the gym basement) you get the last copy.
 
-const CACHE = 'ley-v2';
+const CACHE = 'ley-v3';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'js/app.js', 'js/db.js', 'js/evidence.js',
